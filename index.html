@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sayangku Aza ❤️</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  color:white;
+  overflow:hidden;
+}
+
+/* BACKGROUND BLUR (ANTI PUTIH) */
+.bg-blur{
+  position:fixed;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:blur(25px) brightness(0.3);
+  z-index:-2;
+}
+
+/* FOTO TENGAH */
+.bg-main{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%) scale(0.85); /* ⬅️ dari 0.7 jadi 0.85 */
+  max-height:85%; /* ⬅️ tambah sedikit */
+  border-radius:20px;
+  box-shadow:0 0 40px rgba(0,0,0,0.6);
+  z-index:-1;
+  transition:1.5s;
+}
+
+/* SECTION */
+.section{
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  transition:1s;
+}
+
+.hidden{
+  opacity:0;
+  pointer-events:none;
+}
+
+/* TITLE */
+.title{
+  font-size:40px;
+  color:#ff6f91;
+  text-shadow:0 0 20px #ff6f91;
+}
+
+/* QUIZ */
+input{
+  padding:12px;
+  border-radius:25px;
+  border:none;
+}
+button{
+  margin-top:10px;
+  padding:10px 30px;
+  border:none;
+  border-radius:25px;
+  background:#ff6f91;
+  color:white;
+  cursor:pointer;
+}
+
+/* CHAT TENGAH */
+.chat{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.bubble{
+  background:#ff6f91;
+  padding:12px 20px;
+  border-radius:20px;
+  margin:10px 0;
+  opacity:0;
+  transform:translateY(20px);
+  transition:0.5s;
+  max-width:80%;
+  text-align:center;
+}
+.show{opacity:1; transform:translateY(0);}
+
+/* MESSAGE */
+.message{
+  max-width:600px;
+  text-align:center;
+  line-height:1.8;
+  font-size:18px;
+}
+
+/* FINAL */
+.final{
+  font-size:32px;
+  color:#ff6f91;
+  opacity:0;
+  transition:1s;
+  text-align:center;
+}
+
+/* PLAYER */
+.player{
+  position:fixed;
+  top:20px;
+  left:20px;
+  background:rgba(0,0,0,0.6);
+  padding:10px;
+  border-radius:10px;
+  font-size:14px;
+}
+
+/* HEART */
+.heart{
+  position:fixed;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  to{transform:translateY(100vh);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND -->
+<img id="bg-blur" class="bg-blur">
+<img id="bg-main" class="bg-main">
+
+<div class="player" id="player">🎵 Loading...</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="section">
+<div class="title">🎂 Happy Birthday Sayangku Aza ❤️</div>
+<h2>18 + 1 = ? 😆</h2>
+<input id="ans"><br>
+<button onclick="start()">Mulai</button>
+</div>
+
+<!-- CHAT -->
+<div id="chat" class="section hidden">
+<div class="chat">
+<div class="bubble">Hai Sayangku Aza...</div>
+<div class="bubble">Selamat ulang tahun ya 🎂</div>
+<div class="bubble">Semoga kamu selalu bahagia</div>
+<div class="bubble">Dan semua yang kamu mau tercapai</div>
+</div>
+</div>
+
+<!-- MESSAGE -->
+<div id="message" class="section hidden">
+<div class="message" id="text"></div>
+</div>
+
+<!-- FINAL -->
+<div id="final" class="section hidden">
+<div class="final" id="finalText">
+💖 I Love You Sayang ❤️
+</div>
+</div>
+
+<script>
+
+/* SLIDESHOW FOTO */
+const images = [
+"foto1.jpg","foto2.jpg","foto3.jpg","foto4.jpg",
+"foto5.jpg","foto6.jpg","foto7.jpg","foto8.jpg"
+];
+
+let bgIndex = 0;
+
+function changeBG(){
+  document.getElementById("bg-blur").src = images[bgIndex];
+  document.getElementById("bg-main").src = images[bgIndex];
+}
+
+changeBG();
+
+setInterval(()=>{
+  bgIndex = (bgIndex + 1) % images.length;
+  changeBG();
+},4000);
+
+/* PLAYLIST */
+const songs = [
+"until-i-found-you.mp3",
+"perfect.mp3"
+];
+
+let current = 0;
+let audio = new Audio();
+
+function playMusic(){
+  audio.src = songs[current];
+  audio.play().catch(()=>{});
+
+  document.getElementById("player").innerHTML =
+  "🎵 " + songs[current];
+
+  audio.onended = ()=>{
+    current = (current + 1) % songs.length;
+    playMusic();
+  };
+}
+
+/* START */
+function start(){
+if(document.getElementById("ans").value == 19){
+
+playMusic();
+
+/* QUIZ → CHAT */
+document.getElementById("quiz").classList.add("hidden");
+setTimeout(()=>{
+  document.getElementById("chat").classList.remove("hidden");
+
+  let bubbles=document.querySelectorAll(".bubble");
+  bubbles.forEach((b,i)=>{
+    setTimeout(()=>b.classList.add("show"),i*1200);
+  });
+
+},1000);
+
+/* CHAT → MESSAGE */
+setTimeout(()=>{
+  document.getElementById("chat").classList.add("hidden");
+  document.getElementById("message").classList.remove("hidden");
+  typeText();
+},7000);
+
+}else{
+alert("Salah 😝");
+}
+}
+
+/* TYPE + DELAY */
+function typeText(){
+let text=`Selamat ulang tahun, sayangku Aza 🎂
+Semoga semua hal baik selalu datang ke hidup kamu
+dan kamu selalu punya alasan untuk tersenyum
+
+Aku mungkin bukan yang paling sempurna,
+tapi aku selalu berusaha jadi yang terbaik buat kamu
+
+kamu adalah seseorang
+yang ingin aku jaga ❤️`;
+
+let i=0;
+let el=document.getElementById("text");
+
+let interval=setInterval(()=>{
+  el.innerHTML += text[i];
+  i++;
+
+  if(i>=text.length){
+    clearInterval(interval);
+
+    setTimeout(()=>{
+      document.getElementById("message").classList.add("hidden");
+      document.getElementById("final").classList.remove("hidden");
+
+      setTimeout(()=>{
+        document.getElementById("finalText").style.opacity=1;
+      },500);
+
+    },3000);
+  }
+
+},60);
+}
+
+/* HEART */
+setInterval(()=>{
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="❤️";
+h.style.left=Math.random()*100+"vw";
+h.style.animationDuration=(Math.random()*3+2)+"s";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),5000);
+},300);
+
+</script>
+
+</body>
+</html>
